@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import com.daka.restservice.entity.Persona;
 import com.daka.restservice.service.PersonaService;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 @RestController
 @RequestMapping("/persona")
 public class PersonaController {
@@ -25,12 +23,6 @@ public class PersonaController {
         return new ResponseEntity<List<Persona>>(personas, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/listaXml", method = RequestMethod.GET, produces = {"application/xml", "text/xml"})
-    public ResponseEntity<List<Persona>> listaPersonasXml() {
-        List<Persona> personas = personaService.listaPersona();
-        return new ResponseEntity<List<Persona>>(personas, HttpStatus.OK);
-    }
-
     @GetMapping("/detallePersona/{idPersona}")
     public ResponseEntity<Object> personaById(@PathVariable("idPersona") int idPersona) {
 
@@ -39,17 +31,6 @@ public class PersonaController {
 
         Persona p = personaService.getPersona(idPersona).get();
         return new ResponseEntity<>(p, HttpStatus.OK);
-    }	
-    
-    @RequestMapping(value = "/crearPersonaXml", method = RequestMethod.POST, 
-            produces = {"application/xml", "text/xml"}, consumes = {"application/xml", "text/xml"})
-    public ResponseEntity<Object> crearPersonaXML(@RequestBody Persona persona) {
-
-        if (persona.getNombre().isEmpty())
-            return new ResponseEntity<>("El nombre es obligatorio", HttpStatus.BAD_REQUEST);
-
-        personaService.savePersona(persona);
-        return new ResponseEntity<>("Persona creada", HttpStatus.OK);
     }
 
     @PostMapping("/crearPersona")
